@@ -19,16 +19,15 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 package de.elatexam;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.memcache.MemcacheServiceFactory;
-
-import de.thorstenberger.taskmodel.complex.jaxb.ComplexTaskDef;
+import de.elatexam.dao.DataStoreTaskFactory;
+import de.thorstenberger.taskmodel.TaskDef;
+import de.thorstenberger.taskmodel.TaskModelViewDelegate;
 
 /**
  * @author Steffen Dienst
@@ -38,14 +37,18 @@ public class PreviewServlet extends HttpServlet {
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    String param = req.getParameter("id");
-    if (param != null) {
-      ComplexTaskDef data = (ComplexTaskDef) MemcacheServiceFactory.getMemcacheService().get(param);
-      resp.setContentType("text/plain");
+    long taskdefHandle = Long.parseLong(req.getParameter("id"));
 
-      PrintWriter w = resp.getWriter();
-      w.printf("%d categories\n", data.getCategory().size());
-    }
+    TaskDef data = DataStoreTaskFactory.getInstance().getTaskDef(taskdefHandle);
+      if (data == null) {
+        resp.setContentType("text/plain");
+        resp.getWriter().printf("Unknown id.");
+      } else {
+        String sessionId = req.getSession().getId();
+        TaskModelViewDelegate.startPreview(sessionId, taskdefHandle);
+
+        resp.sendRedirect("/execute.do?todo=new&try=1&id="+taskdefHandle);
+      }
   }
 
 }

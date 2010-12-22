@@ -1,17 +1,93 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd">
-
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
-    <servlet>
-        <servlet-name>sign</servlet-name>
-        <servlet-class>de.elatexam.SignGuestbookServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>sign</servlet-name>
-        <url-pattern>/sign</url-pattern>
-    </servlet-mapping>
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+ <description>The presentation layer webapp for complex Tasks of the TaskModel.</description>
+ <display-name>taskmodel-core-view</display-name>
+ <filter>
+  <display-name>Set Character Encoding Filter</display-name>
+  <filter-name>SetCharacterEncodingFilter</filter-name>
+  <filter-class>de.thorstenberger.taskmodel.view.SetCharacterEncodingFilter</filter-class>
+  <init-param>
+   <param-name>encoding</param-name>
+   <param-value>UTF-8</param-value>
+  </init-param>
+  <init-param>
+   <param-name>ignore</param-name>
+   <param-value>false</param-value>
+  </init-param>
+ </filter>
+  <filter>
+  <filter-name>exportPdfFilter</filter-name>
+  <filter-class>de.thorstenberger.taskmodel.view.webapp.filter.ExportPDFFilter</filter-class>
+ </filter>
+ <filter-mapping>
+  <filter-name>SetCharacterEncodingFilter</filter-name>
+  <servlet-name>action</servlet-name>
+ </filter-mapping>
+  <filter-mapping>
+  <filter-name>exportPdfFilter</filter-name>
+  <servlet-name>action</servlet-name>
+ </filter-mapping>
+ <listener>
+  <listener-class>de.thorstenberger.taskmodel.view.SessionListener</listener-class>
+ </listener>
+ <listener>
+  <listener-class>de.thorstenberger.taskmodel.view.webapp.filter.InitViewFactoryListener</listener-class>
+ </listener>
+ <servlet>
+  <servlet-name>action</servlet-name>
+  <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
+  <init-param>
+   <param-name>config</param-name>
+   <param-value>/WEB-INF/struts-config.xml</param-value>
+  </init-param>
+ </servlet>
+ <servlet>
+  <servlet-name>ExcelReport</servlet-name>
+  <servlet-class>de.thorstenberger.taskmodel.view.statistics.ExcelReportServlet</servlet-class>
+ </servlet>
+ <servlet>
+  <servlet-name>AjaxResponse</servlet-name>
+  <servlet-class>de.thorstenberger.taskmodel.view.AjaxResponseServlet</servlet-class>
+ </servlet>
+ 
+ <servlet>
+  <servlet-name>CewolfServlet</servlet-name>
+  <servlet-class>de.laures.cewolf.CewolfRenderer</servlet-class>
+  <load-on-startup>1</load-on-startup>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>CewolfServlet</servlet-name>
+  <url-pattern>/cewolf/*</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>action</servlet-name>
+  <url-pattern>*.do</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>ExcelReport</servlet-name>
+  <url-pattern>/excelReport/*</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>AjaxResponse</servlet-name>
+  <url-pattern>/ajaxResponse</url-pattern>
+ </servlet-mapping>
+ <session-config>
+  <session-timeout>240</session-timeout>
+ </session-config>
+ <login-config>
+  <auth-method>BASIC</auth-method>
+ </login-config>
+ <error-page>
+  <error-code>500</error-code>
+  <location>/error.jsp</location>
+ </error-page>
+ 
+ <!-- 
+ =======================================================================================
+ changes needed for running at the gae 
+ ======================================================================================= 
+ -->
     <servlet>
         <servlet-name>upload</servlet-name>
         <servlet-class>de.elatexam.UploadTaskdefServlet</servlet-class>
@@ -62,6 +138,6 @@
     <!--  /appstats -->
         
     <welcome-file-list>
-        <welcome-file>guestbook.jsp</welcome-file>
+        <welcome-file>uploadFile.jsp</welcome-file>
     </welcome-file-list>
 </web-app>
