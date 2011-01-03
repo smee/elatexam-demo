@@ -35,9 +35,23 @@ import de.elatexam.model.TaskDefVO;
  */
 public class TaskDefDaoGDS implements TaskDefDao {
 
+  public void deleteTaskDef(String username, long id) {
+    PersistenceManager pm = PMF.get().getPersistenceManager();
+    try {
+    Query query = pm.newQuery(TaskDefVO.class, String.format("username == '%s' && id == %d", username, id));
+    query.setUnique(true);
+      TaskDefVO td = (TaskDefVO) query.execute();
+      if(td != null) {
+        td.setVisible(false);
+      }
+    } finally {
+      pm.close();
+    }
+  }
+
   public List<TaskDefVO> getTaskDefs(String username) {
     PersistenceManager pm = PMF.get().getPersistenceManager();
-    Query query = pm.newQuery(TaskDefVO.class, "username == \"" + username + "\"");
+    Query query = pm.newQuery(TaskDefVO.class, String.format("username == '%s' && visible == true", username));
     return (List<TaskDefVO>) query.execute();
   }
   /* (non-Javadoc)
@@ -45,7 +59,7 @@ public class TaskDefDaoGDS implements TaskDefDao {
    */
   public TaskDefVO getTaskDef(long id) {
     PersistenceManager pm = PMF.get().getPersistenceManager();
-    Query query = pm.newQuery(TaskDefVO.class, "id == " + id);
+    Query query = pm.newQuery(TaskDefVO.class, String.format("id == %d && visible == true", id));
     query.setUnique(true);
     return (TaskDefVO) query.execute(id);
   }

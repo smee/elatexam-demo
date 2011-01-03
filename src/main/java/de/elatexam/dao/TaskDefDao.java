@@ -37,4 +37,6 @@ public interface TaskDefDao {
 
   void storeTaskDef(TaskDefVO td);
 
+  void deleteTaskDef(String username, long taskId);
+
 }

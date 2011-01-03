@@ -46,7 +46,7 @@ public class UploadTaskdefServlet extends HttpServlet {
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
-      resp.sendRedirect("uploadFile.jsp");
+      resp.sendRedirect("/");
     } else {
       try {
         ServletFileUpload upload = new ServletFileUpload();

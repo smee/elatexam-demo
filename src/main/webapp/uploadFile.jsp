@@ -30,7 +30,7 @@
 %>
 <c:if test="${user == null}">
 	<p>Hallo! <a
-		href="<%=userService.createLoginURL(request.getRequestURI())%>">Melden Sie sich an</a>,  um Aufgabenpools hochzuladen.</p>
+		href="<%=userService.createLoginURL(request.getRequestURI())%>">Bitte melden Sie sich an</a>,  um Aufgabenpools hochzuladen.</p>
 </c:if>
 <c:if test="${user != null}">
 	<p>Hallo, <c:out value="${user.nickname}" />! (Sie k&ouml;nnen sich <a
@@ -53,6 +53,7 @@ Links zu allen von Ihnen hochgeladenen Aufgaben: <br/>
 		<tr>
 		  <td><a href="/preview?id=<c:out value="${td.id}"/>"><c:out value="${td.id}"/></a></td>
 		  <td><c:out value="${td.creationDate}"/></td>
+		  <td><a href="/delete?id=<c:out value="${td.id}"/>">L&ouml;schen</a></td>
 		</tr>
 	</c:forEach>
 	</table>

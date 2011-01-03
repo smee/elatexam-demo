@@ -232,6 +232,11 @@ public class DataStoreTaskFactory extends AbstractTaskFactory implements TaskFac
     if (tdvo != null) {
       tdvo.setVisible(false); // make invisible rather than delete physically
       taskDefDao.storeTaskDef(tdvo);
+      MemcacheService cache = Tools.c();
+
+      if (cache.contains(id)) {
+        cache.delete(id);
+      }
     }
   }
 
@@ -283,6 +288,10 @@ public class DataStoreTaskFactory extends AbstractTaskFactory implements TaskFac
         return td;
       } else
         return null;
+  }
+
+  public void deleteTaskDef(String username, long taskId) {
+    taskDefDao.deleteTaskDef(username, taskId);
   }
 
   /**
