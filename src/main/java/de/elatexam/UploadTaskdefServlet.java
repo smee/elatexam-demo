@@ -57,7 +57,7 @@ public class UploadTaskdefServlet extends HttpServlet {
           InputStream stream = item.openStream();
 
           long handle = System.nanoTime();
-          DataStoreTaskFactory.getInstance().storeTaskDef(stream, handle,userService.getCurrentUser());
+          DataStoreTaskFactory.getInstance().storeTaskDef(stream, handle, userService.getCurrentUser(), req.getParameter("returnurl"));
 
           resp.sendRedirect("/");
         }

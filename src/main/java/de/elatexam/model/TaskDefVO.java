@@ -53,6 +53,8 @@ public class TaskDefVO {
   private Date creationDate;
   @Persistent
   private String username;
+  @Persistent
+  private String returnUrl;
 
   public TaskDefVO() {
     this.creationDate = new Date();
@@ -133,5 +135,22 @@ public class TaskDefVO {
     return username;
   }
 
+  /**
+   * @param returnUrl
+   *          the returnUrl to set
+   */
+  public void setReturnUrl(String returnUrl) {
+    this.returnUrl = returnUrl;
+  }
+
+  /**
+   * @return the returnUrl
+   */
+  public String getReturnUrl() {
+    if (returnUrl == null)
+      return "http://www.elatexam.de";
+    else
+      return returnUrl;
+  }
 
 }

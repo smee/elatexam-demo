@@ -39,8 +39,9 @@
 Neue Aufgabe hochladen: <br/>
 
 	<form action="/upload" method="post" enctype="multipart/form-data">
-		<div><input type="file" name="content"/></div>
-		<div><input type="submit" value="Upload" /></div>
+		<div><label>R&uuml;cksprung-URL:</label><input type="text" name="returnurl"/></div>
+		<div><label>Aufgabendatei:</label><input type="file" name="content"/></div>
+		<div><input type="submit" value="Hochladen" /></div>
 	</form>
 
 <br/>

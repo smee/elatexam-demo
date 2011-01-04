@@ -76,4 +76,21 @@ public class TaskDefDaoGDS implements TaskDefDao {
     }
   }
 
+  /*
+   * (non-Javadoc)
+   * 
+   * @see de.elatexam.dao.TaskDefDao#getReturnUrl(long)
+   */
+  public String getReturnUrl(long taskId) {
+    PersistenceManager pm = PMF.get().getPersistenceManager();
+    try {
+      Query query = pm.newQuery(TaskDefVO.class, String.format("id == %d", taskId));
+      query.setResult("returnUrl");
+      query.setUnique(true);
+      return (String) query.execute();
+    } finally {
+      pm.close();
+    }
+  }
+
 }

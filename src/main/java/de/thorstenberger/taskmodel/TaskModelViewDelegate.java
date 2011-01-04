@@ -43,7 +43,7 @@ public class TaskModelViewDelegate {
         }
 
         public String getReturnURL() {
-          return "http://www.elatexam.de";
+        return DataStoreTaskFactory.getInstance().getReturnUrl(taskId);
         }
 
         public String getUserName() {
