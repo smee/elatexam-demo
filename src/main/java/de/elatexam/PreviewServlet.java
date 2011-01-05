@@ -47,7 +47,7 @@ public class PreviewServlet extends HttpServlet {
         String sessionId = req.getSession().getId();
         TaskModelViewDelegate.startPreview(sessionId, taskdefHandle);
 
-        resp.sendRedirect("/execute.do?todo=new&try=1&id="+taskdefHandle);
+        resp.sendRedirect("/preview.jsp?id="+taskdefHandle);
       }
   }
 

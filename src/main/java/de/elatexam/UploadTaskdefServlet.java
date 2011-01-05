@@ -19,7 +19,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 package de.elatexam;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -30,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload.util.Streams;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -49,21 +49,24 @@ public class UploadTaskdefServlet extends HttpServlet {
       resp.sendRedirect("/");
     } else {
       try {
+        String returnurl = null;
         ServletFileUpload upload = new ServletFileUpload();
 
         FileItemIterator iterator = upload.getItemIterator(req);
         while (iterator.hasNext()) {
           FileItemStream item = iterator.next();
-          InputStream stream = item.openStream();
+          if (item.getFieldName().equals("returnurl")) {
+            returnurl = Streams.asString(item.openStream());
+          }else{
 
           long handle = System.nanoTime();
-          DataStoreTaskFactory.getInstance().storeTaskDef(stream, handle, userService.getCurrentUser(), req.getParameter("returnurl"));
-
-          resp.sendRedirect("/");
+          DataStoreTaskFactory.getInstance().storeTaskDef(item.openStream(), handle, userService.getCurrentUser(), returnurl);
+          }
         }
       } catch (Exception ex) {
         throw new ServletException(ex);
       }
+      resp.sendRedirect("/");
     }
 
   }
