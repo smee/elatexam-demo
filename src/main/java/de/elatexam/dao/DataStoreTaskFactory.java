@@ -529,7 +529,7 @@ public class DataStoreTaskFactory extends AbstractTaskFactory implements TaskFac
     throw new UnsupportedOperationException();
   }
 
-  public void storeTaskDef(InputStream stream, long handle, User user, String returnUrl) {
+  public void storeTaskDef(InputStream stream, long handle, User user) {
     TaskDefVO tdvo = taskDefDao.getTaskDef(handle);
     if (tdvo == null) {
       tdvo = new TaskDefVO();
@@ -537,7 +537,6 @@ public class DataStoreTaskFactory extends AbstractTaskFactory implements TaskFac
       tdvo.setVisible(true);
       tdvo.setUsername(user.getNickname());
       tdvo.setVisible(true);
-      tdvo.setReturnUrl(returnUrl);
 
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       try {

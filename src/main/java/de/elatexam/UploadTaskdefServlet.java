@@ -29,7 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.fileupload.util.Streams;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -49,20 +48,15 @@ public class UploadTaskdefServlet extends HttpServlet {
       resp.sendRedirect("/");
     } else {
       try {
-        String returnurl = null;
         ServletFileUpload upload = new ServletFileUpload();
 
         FileItemIterator iterator = upload.getItemIterator(req);
         while (iterator.hasNext()) {
           FileItemStream item = iterator.next();
-          if (item.getFieldName().equals("returnurl")) {
-            returnurl = Streams.asString(item.openStream());
-          }else{
 
           long handle = System.nanoTime();
-          DataStoreTaskFactory.getInstance().storeTaskDef(item.openStream(), handle, userService.getCurrentUser(), returnurl);
+          DataStoreTaskFactory.getInstance().storeTaskDef(item.openStream(), handle, userService.getCurrentUser());
           }
-        }
       } catch (Exception ex) {
         throw new ServletException(ex);
       }
