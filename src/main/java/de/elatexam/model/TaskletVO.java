@@ -22,6 +22,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 package de.elatexam.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -66,6 +67,8 @@ public class TaskletVO {
   private List<String> flags = new ArrayList();
   @Persistent
   private Blob xml;
+  @Persistent
+  private Date lastStored;
 
   /**
    * @return the xml
@@ -255,6 +258,21 @@ public class TaskletVO {
    */
   public void setSessionId(String sessionId) {
     this.sessionId = sessionId;
+  }
+
+  /**
+   * @param lastStored
+   *          the lastStored to set
+   */
+  public void setLastStored(Date lastStored) {
+    this.lastStored = lastStored;
+  }
+
+  /**
+   * @return the lastStored
+   */
+  public Date getLastStored() {
+    return lastStored;
   }
 
   public class ManualCorrectionsVO {

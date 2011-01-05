@@ -18,6 +18,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package de.elatexam.dao.impl;
 
+import java.util.Date;
+
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
@@ -58,6 +60,7 @@ public class TaskHandlingDaoGDS implements TaskHandlingDao {
   public void saveTasklet(TaskletVO taskletVO) {
     // is this object really new or is it already attached to the store?
     if (!JDOHelper.isPersistent(taskletVO)) {
+      taskletVO.setLastStored(new Date());
       // new object, persist it
       PersistenceManager pm = PMF.get().getPersistenceManager();
       try {
@@ -73,10 +76,11 @@ public class TaskHandlingDaoGDS implements TaskHandlingDao {
    *
    * @see de.elatexam.dao.TaskHandlingDao#removeTasklet(de.elatexam.model.TaskletVO)
    */
-  public void removeTasklet(TaskletVO taskletVO) {
+  public void removeTasklet(long taskId, String sessionId) {
     PersistenceManager pm = PMF.get().getPersistenceManager();
     try {
-      pm.deletePersistent(pm.makePersistent(taskletVO));
+      Query query = pm.newQuery(TaskletVO.class, String.format("taskDefId == %d && sessionId == '%s'", taskId, sessionId));
+      query.deletePersistentAll();
     } finally {
       pm.close();
     }

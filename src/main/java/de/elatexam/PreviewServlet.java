@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import de.elatexam.dao.DataStoreTaskFactory;
 import de.thorstenberger.taskmodel.TaskDef;
-import de.thorstenberger.taskmodel.TaskModelViewDelegate;
 
 /**
  * @author Steffen Dienst
@@ -44,8 +43,6 @@ public class PreviewServlet extends HttpServlet {
         resp.setContentType("text/plain");
         resp.getWriter().printf("Unknown id.");
       } else {
-        String sessionId = req.getSession().getId();
-        TaskModelViewDelegate.startPreview(sessionId, taskdefHandle);
 
         resp.sendRedirect("/preview.jsp?id="+taskdefHandle);
       }

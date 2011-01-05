@@ -29,10 +29,10 @@ import de.elatexam.model.TaskletVO;
  */
 public interface TaskHandlingDao {
 
-  public TaskletVO getTasklet(long taskId, String userId);
+  public TaskletVO getTasklet(long taskId, String sessionId);
 
   public void saveTasklet(TaskletVO taskletVO);
 
-  public void removeTasklet(TaskletVO taskletVO);
+  public void removeTasklet(long taskId, String sessionId);
 
 }

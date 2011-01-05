@@ -18,6 +18,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package de.thorstenberger.taskmodel;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
 
@@ -30,6 +33,7 @@ import de.elatexam.dao.DataStoreTaskFactory;
  *
  */
 public class TaskModelViewDelegate {
+  public static final Logger log = Logger.getLogger(TaskModelViewDelegate.class.getName());
 
   public static DelegateObject getDelegateObject(final String sessionId, final long taskId) {
       return new TaskModelViewDelegateObject(){
@@ -43,7 +47,7 @@ public class TaskModelViewDelegate {
         }
 
         public String getReturnURL() {
-        return DataStoreTaskFactory.getInstance().getReturnUrl(taskId);
+          return "/preview?id="+taskId;
         }
 
         public String getUserName() {
@@ -80,12 +84,11 @@ public class TaskModelViewDelegate {
    * @param taskDefCacheId
    */
   public static void startPreview(String sessionId, long taskDefHandle) {
-    // XXX better use session parameters?
-    // MemcacheService mcs = c();
-    // Map m = new HashMap();
-    // m.put("taskdefcacheid", taskDefCacheId);
-    // mcs.put(sessionId, m);
-    // log.fine("using session " + sessionId + " and taskDefCacheId " + taskDefCacheId);
+    try {
+      DataStoreTaskFactory.getInstance().removeTasklet(sessionId, taskDefHandle);
+    } catch (TaskApiException e) {
+      log.log(Level.SEVERE, "Could not delete tasklet.", e);
+    }
   }
 
 

@@ -69,7 +69,6 @@ import de.thorstenberger.taskmodel.TaskFilter;
 import de.thorstenberger.taskmodel.TaskFilterException;
 import de.thorstenberger.taskmodel.TaskManager.UserAttribute;
 import de.thorstenberger.taskmodel.Tasklet;
-import de.thorstenberger.taskmodel.Tasklet.Status;
 import de.thorstenberger.taskmodel.TaskletCorrection;
 import de.thorstenberger.taskmodel.TaskmodelUtil;
 import de.thorstenberger.taskmodel.UserInfo;
@@ -507,9 +506,9 @@ public class DataStoreTaskFactory extends AbstractTaskFactory implements TaskFac
    *
    * @see de.thorstenberger.taskmodel.TaskFactory#removeTasklet(java.lang.String, long)
    */
-  public void removeTasklet(final String userId, final long taskId)
+  public void removeTasklet(final String sessionId, final long taskId)
       throws TaskApiException {
-    throw new MethodNotSupportedException();
+    taskHandlingDao.removeTasklet(taskId, sessionId);
   }
 
   /*
@@ -565,12 +564,6 @@ public class DataStoreTaskFactory extends AbstractTaskFactory implements TaskFac
     TaskletVO taskletVO = taskHandlingDao.getTasklet(tasklet.getTaskId(), ((SessionAwareComplexTasklet) tasklet).getSessionId());
 
     onStoreTasklet(tasklet, taskletVO);
-
-    // remove solved tasklets, we do not support correction right now
-    if (tasklet.hasOrPassedStatus(Status.SOLVED)) {
-      taskHandlingDao.removeTasklet(taskletVO);
-      return;
-    }
 
     if (taskletVO.getTaskDefId() != tasklet.getTaskId()) {
       taskletVO.setTaskDefId(tasklet.getTaskId());

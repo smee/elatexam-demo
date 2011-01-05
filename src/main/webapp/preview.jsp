@@ -1,9 +1,17 @@
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <jsp:directive.page import="de.elatexam.dao.DataStoreTaskFactory" />
+<jsp:directive.page import="de.thorstenberger.taskmodel.Tasklet" />
+<jsp:directive.page import="de.thorstenberger.taskmodel.Tasklet.Status" />
+<jsp:directive.page import="de.thorstenberger.taskmodel.complex.ComplexTasklet" />
 <%
 long id = Long.parseLong(request.getParameter("id"));
 request.setAttribute("taskdef",DataStoreTaskFactory.getInstance().getTaskDef(id));
+Tasklet tasklet = DataStoreTaskFactory.getInstance().getTasklet(request.getSession().getId(),id);
+request.setAttribute("tasklet",tasklet);
+request.setAttribute("correctionAvailable",(tasklet!=null && tasklet.hasOrPassedStatus(Status.SOLVED)));
+request.setAttribute("canContinue",(tasklet!=null && tasklet.getStatus()==Status.INPROGRESS));
+request.setAttribute("nextTry", (tasklet==null)?1:((ComplexTasklet)tasklet).getComplexTaskHandlingRoot().getNumberOfTries()+1);
 %>
 <html>
   <head>
@@ -152,7 +160,15 @@ request.setAttribute("taskdef",DataStoreTaskFactory.getInstance().getTaskDef(id)
 
 
 
-                              Korrekturstand des letzten Versuchs: nicht verf&uuml;gbar
+                              Korrekturstand des letzten Versuchs: 
+                              <c:choose>
+								<c:when test="${correctionAvailable}">
+									<a href="/showSolution.do?id=<c:out value="${taskdef.id}"/>">verf&uuml;gbar</a>
+								</c:when>
+								<c:otherwise>
+									nicht verf&uuml;gbar
+								</c:otherwise>
+							</c:choose>
                               <br>
                             </fieldset>
                             <br>
@@ -170,11 +186,13 @@ request.setAttribute("taskdef",DataStoreTaskFactory.getInstance().getTaskDef(id)
                                         Neuer L&ouml;sungsversuch
                                       </legend>
                                       <form method="get" action="/execute.do">
-                                        <input type="submit" value="Starten">
+                                        <input type="submit" value="Starten" 
+	                                   		<c:if test="${canContinue}"> disabled="true"</c:if>
+                                        >
                                         <input type="hidden" name="action" value="ComplexTaskExecute">
                                         <input type="hidden" name="id" value="<c:out value="${taskdef.id}"/>">
                                         <input type="hidden" name="todo" value="new">
-                                        <input type="hidden" name="try" value="1">
+                                        <input type="hidden" name="try" value="<c:out value="${nextTry}"/>">
 
                                       </form>
                                       <c:out value="${taskdef.complexTaskDefRoot.startText}"/>
@@ -186,9 +204,11 @@ request.setAttribute("taskdef",DataStoreTaskFactory.getInstance().getTaskDef(id)
                                         L&ouml;sungsversuch fortsetzen
                                       </legend>
                                       <form method="get" action="/execute.do">
-                                        <input type="submit" value="Fortsetzen" disabled="true">
+                                        <input type="submit" value="Fortsetzen" 
+                                          <c:if test="${!canContinue}"> disabled="true"</c:if>
+                                        >
                                         <input type="hidden" name="action" value="ComplexTaskExecute">
-                                        <input type="hidden" name="id" value="???">
+                                        <input type="hidden" name="id" value="<c:out value="${taskdef.id}"/>">
                                         <input type="hidden" name="todo" value="continue">
                                         <input type="hidden" name="page" value="1">
                                       </form>
