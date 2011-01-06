@@ -87,6 +87,7 @@
         <servlet-name>upload</servlet-name>
         <url-pattern>/upload</url-pattern>
     </servlet-mapping>
+
     <servlet>
         <servlet-name>preview</servlet-name>
         <servlet-class>de.elatexam.PreviewServlet</servlet-class>
@@ -103,7 +104,15 @@
         <servlet-name>delete</servlet-name>
         <url-pattern>/delete</url-pattern>
     </servlet-mapping>
-    
+  <servlet>
+    <servlet-name>ping</servlet-name>
+    <servlet-class>de.elatexam.PingServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ping</servlet-name>
+    <url-pattern>/_ah/queue/default</url-pattern>
+  </servlet-mapping>
+  
     <!--  appstats -->
     <servlet>
         <servlet-name>appstats</servlet-name>
@@ -128,6 +137,7 @@
     
     <security-constraint>
         <web-resource-collection>
+            <web-resource-name>appstats</web-resource-name>
             <url-pattern>/appstats/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
