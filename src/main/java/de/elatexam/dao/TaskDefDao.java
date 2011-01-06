@@ -39,6 +39,4 @@ public interface TaskDefDao {
 
   void deleteTaskDef(String username, long taskId);
 
-  String getReturnUrl(long taskId);
-
 }

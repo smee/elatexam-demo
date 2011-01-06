@@ -26,6 +26,7 @@ import javax.jdo.Query;
 import de.elatexam.PMF;
 import de.elatexam.dao.TaskDefDao;
 import de.elatexam.model.TaskDefVO;
+import de.elatexam.util.Tools;
 
 /**
  * Implementation for the google datastore.
@@ -36,6 +37,9 @@ import de.elatexam.model.TaskDefVO;
 public class TaskDefDaoGDS implements TaskDefDao {
 
   public void deleteTaskDef(String username, long id) {
+    Tools.c().delete(getKey(id));
+
+    System.out.println("deleting taskdef");
     PersistenceManager pm = PMF.get().getPersistenceManager();
     try {
     Query query = pm.newQuery(TaskDefVO.class, String.format("username == '%s' && id == %d", username, id));
@@ -50,6 +54,8 @@ public class TaskDefDaoGDS implements TaskDefDao {
   }
 
   public List<TaskDefVO> getTaskDefs(String username) {
+    System.out.println("loading taskdefs");
+
     PersistenceManager pm = PMF.get().getPersistenceManager();
     Query query = pm.newQuery(TaskDefVO.class, String.format("username == '%s' && visible == true", username));
     return (List<TaskDefVO>) query.execute();
@@ -58,36 +64,39 @@ public class TaskDefDaoGDS implements TaskDefDao {
    * @see de.elatexam.dao.TaskDefDao#getTaskDef(long)
    */
   public TaskDefVO getTaskDef(long id) {
+    TaskDefVO fromCache = (TaskDefVO) Tools.c().get(getKey(id));
+    if (fromCache != null)
+      return fromCache;
+
+    System.out.println("loading taskdef");
+
     PersistenceManager pm = PMF.get().getPersistenceManager();
     Query query = pm.newQuery(TaskDefVO.class, String.format("id == %d && visible == true", id));
     query.setUnique(true);
-    return (TaskDefVO) query.execute(id);
+    TaskDefVO res = (TaskDefVO) query.execute(id);
+
+    // cache it
+    if (res != null) {
+      Tools.c().put(getKey(id), res);
+    }
+
+    return res;
+  }
+
+  private String getKey(long id) {
+    return "taskdefvo:" + id;
   }
 
   /* (non-Javadoc)
    * @see de.elatexam.dao.TaskDefDao#storeTaskDef(de.elatexam.model.TaskDefVO)
    */
   public void storeTaskDef(TaskDefVO td) {
+    Tools.c().put(getKey(td.getId()), td);
+
+    System.out.println("storing taskdef");
     PersistenceManager pm = PMF.get().getPersistenceManager();
     try {
       pm.makePersistent(td);
-    } finally {
-      pm.close();
-    }
-  }
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see de.elatexam.dao.TaskDefDao#getReturnUrl(long)
-   */
-  public String getReturnUrl(long taskId) {
-    PersistenceManager pm = PMF.get().getPersistenceManager();
-    try {
-      Query query = pm.newQuery(TaskDefVO.class, String.format("id == %d", taskId));
-      query.setResult("returnUrl");
-      query.setUnique(true);
-      return (String) query.execute();
     } finally {
       pm.close();
     }

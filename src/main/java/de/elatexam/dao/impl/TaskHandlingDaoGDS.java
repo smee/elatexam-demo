@@ -27,6 +27,7 @@ import javax.jdo.Query;
 import de.elatexam.PMF;
 import de.elatexam.dao.TaskHandlingDao;
 import de.elatexam.model.TaskletVO;
+import de.elatexam.util.Tools;
 
 /**
  * Implementation for the google datastore.
@@ -42,14 +43,30 @@ public class TaskHandlingDaoGDS implements TaskHandlingDao {
    * @see de.elatexam.dao.TaskHandlingDao#getTasklet(long, java.lang.String)
    */
   public TaskletVO getTasklet(long taskId, String sessionId) {
+    TaskletVO fromCache = (TaskletVO) Tools.c().get(getKey(sessionId, taskId));
+    if (fromCache != null)
+      return fromCache;
+
+    System.out.println("loading tasklet");
     PersistenceManager pm = PMF.get().getPersistenceManager();
     try {
       Query query = pm.newQuery(TaskletVO.class, String.format("taskDefId == %d && sessionId == '%s'", taskId, sessionId));
       query.setUnique(true);
-      return (TaskletVO) query.execute(taskId, sessionId);
+      TaskletVO res = (TaskletVO) query.execute(taskId, sessionId);
+
+      // cache it
+      if (res != null) {
+        Tools.c().put(getKey(sessionId, taskId), res);
+      }
+
+      return res;
     } finally {
       pm.close();
     }
+  }
+
+  private String getKey(String sessionId, long taskId) {
+    return "tasklet:" + sessionId + "_" + taskId;
   }
 
   /*
@@ -58,9 +75,13 @@ public class TaskHandlingDaoGDS implements TaskHandlingDao {
    * @see de.elatexam.dao.TaskHandlingDao#saveTasklet(de.elatexam.model.TaskletVO)
    */
   public void saveTasklet(TaskletVO taskletVO) {
+    System.out.println("saving tasklet");
+    taskletVO.setLastStored(new Date());
+    // update cache
+    Tools.c().put(getKey(taskletVO.getSessionId(), taskletVO.getTaskDefId()), taskletVO);
+
     // is this object really new or is it already attached to the store?
     if (!JDOHelper.isPersistent(taskletVO)) {
-      taskletVO.setLastStored(new Date());
       // new object, persist it
       PersistenceManager pm = PMF.get().getPersistenceManager();
       try {
@@ -77,6 +98,9 @@ public class TaskHandlingDaoGDS implements TaskHandlingDao {
    * @see de.elatexam.dao.TaskHandlingDao#removeTasklet(de.elatexam.model.TaskletVO)
    */
   public void removeTasklet(long taskId, String sessionId) {
+    System.out.println("removing tasklet");
+    Tools.c().delete(getKey(sessionId, taskId));
+
     PersistenceManager pm = PMF.get().getPersistenceManager();
     try {
       Query query = pm.newQuery(TaskletVO.class, String.format("taskDefId == %d && sessionId == '%s'", taskId, sessionId));

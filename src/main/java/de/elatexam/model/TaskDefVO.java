@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package de.elatexam.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -37,7 +38,7 @@ import com.google.appengine.api.datastore.Key;
  *
  */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class TaskDefVO {
+public class TaskDefVO implements Serializable {
   @PrimaryKey
   @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
   private Key key;

@@ -656,12 +656,4 @@ public class DataStoreTaskFactory extends AbstractTaskFactory implements TaskFac
 
   }
 
-  public String getReturnUrl(long taskId) {
-    String url = taskDefDao.getReturnUrl(taskId);
-    if (url == null) {
-      url = "http://elatexam.de";
-    }
-    return url;
-  }
-
 }
