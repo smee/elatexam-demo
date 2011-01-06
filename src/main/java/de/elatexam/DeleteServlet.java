@@ -41,8 +41,8 @@ public class DeleteServlet extends HttpServlet {
     String handle = req.getParameter("id");
 
     UserService userService = UserServiceFactory.getUserService();
-    long taskdefHandle = Long.parseLong(handle);
     if (handle != null && userService.isUserLoggedIn()) {
+      long taskdefHandle = Long.parseLong(handle);
       DataStoreTaskFactory.getInstance().deleteTaskDef(userService.getCurrentUser().getNickname(), taskdefHandle);
     }
     resp.sendRedirect("/");
