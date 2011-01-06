@@ -65,9 +65,11 @@
  <session-config>
   <session-timeout>240</session-timeout>
  </session-config>
+ <!-- not supported by gae
  <login-config>
   <auth-method>BASIC</auth-method>
  </login-config>
+-->
  <error-page>
   <error-code>500</error-code>
   <location>/error.jsp</location>
@@ -112,6 +114,15 @@
     <servlet-name>ping</servlet-name>
     <url-pattern>/_ah/queue/default</url-pattern>
   </servlet-mapping>
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>queues</web-resource-name>
+            <url-pattern>/_ah/queue/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>  
   
     <!--  appstats -->
     <servlet>
