@@ -33,9 +33,9 @@ import de.elatexam.util.Tools;
 
 /**
  * Add queue every 10s to keep the gae vm running.... dirty hack , I know.
- * 
+ *
  * @author Steffen Dienst
- * 
+ *
  */
 public class PingServlet extends HttpServlet {
 
@@ -43,7 +43,16 @@ public class PingServlet extends HttpServlet {
   private static final String REQ_TOKEN = "token";
 
   @Override
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    handleRequest(req, resp);
+  };
+
+  @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    handleRequest(req, resp);
+  }
+
+  private void handleRequest(HttpServletRequest req, HttpServletResponse resp) {
     String token = req.getParameter(REQ_TOKEN);
     String curToken = (String) Tools.c().get(NEXT_TOKEN);
     if (curToken == null) {
@@ -56,6 +65,7 @@ public class PingServlet extends HttpServlet {
       queue.add(TaskOptions.Builder.withParam(REQ_TOKEN, nextToken).countdownMillis(10000));
     }
     resp.setStatus(200);
+
   }
 
 }
