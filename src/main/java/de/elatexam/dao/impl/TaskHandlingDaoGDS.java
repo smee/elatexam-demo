@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 package de.elatexam.dao.impl;
 
 import java.util.Date;
+import java.util.logging.Logger;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
@@ -36,7 +37,7 @@ import de.elatexam.util.Tools;
  *
  */
 public class TaskHandlingDaoGDS implements TaskHandlingDao {
-
+  final static Logger logger = Logger.getLogger(TaskHandlingDaoGDS.class.getName());
   /*
    * (non-Javadoc)
    *
@@ -105,6 +106,19 @@ public class TaskHandlingDaoGDS implements TaskHandlingDao {
     try {
       Query query = pm.newQuery(TaskletVO.class, String.format("taskDefId == %d && sessionId == '%s'", taskId, sessionId));
       query.deletePersistentAll();
+    } finally {
+      pm.close();
+    }
+
+  }
+
+  public void removeTaskletsOlderThan(Date time) {
+    PersistenceManager pm = PMF.get().getPersistenceManager();
+    try {
+      Query query = pm.newQuery(TaskletVO.class, "lastStored < queryDate");
+      query.declareParameters("java.util.Date queryDate");
+      long count = query.deletePersistentAll(time);
+      logger.info(String.format("Deleted %d old tasklets.", count));
     } finally {
       pm.close();
     }

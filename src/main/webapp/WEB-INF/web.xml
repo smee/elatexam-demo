@@ -107,12 +107,32 @@
         <url-pattern>/delete</url-pattern>
     </servlet-mapping>
   <servlet>
+    <servlet-name>cleanuptasklet</servlet-name>
+    <servlet-class>de.elatexam.DeleteOldTaskletsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>cleanuptasklet</servlet-name>
+    <url-pattern>/_ah/cleanup</url-pattern>
+  </servlet-mapping>
+  
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>cleanup</web-resource-name>
+            <url-pattern>/_ah/cleanup</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>  
+      
+  <servlet>
     <servlet-name>ping</servlet-name>
     <servlet-class>de.elatexam.PingServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>ping</servlet-name>
     <url-pattern>/_ah/queue/default</url-pattern>
+    
   </servlet-mapping>
     <security-constraint>
         <web-resource-collection>
