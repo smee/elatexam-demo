@@ -12,4 +12,9 @@
     <schedule>every 24 hours</schedule>
     <timezone>America/Los_Angeles</timezone>
   </cron>
+  <cron>
+    <url>/_ah/sessioncleanup?clear</url>
+    <description>Clean up sessions</description>
+    <schedule>every 24 hours</schedule>
+  </cron>   
 </cronentries>  

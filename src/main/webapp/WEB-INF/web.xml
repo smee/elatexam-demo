@@ -1,111 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
- <description>The presentation layer webapp for complex Tasks of the TaskModel.</description>
- <display-name>taskmodel-core-view</display-name>
- <filter>
-  <display-name>Set Character Encoding Filter</display-name>
-  <filter-name>SetCharacterEncodingFilter</filter-name>
-  <filter-class>de.thorstenberger.taskmodel.view.SetCharacterEncodingFilter</filter-class>
-  <init-param>
-   <param-name>encoding</param-name>
-   <param-value>UTF-8</param-value>
-  </init-param>
-  <init-param>
-   <param-name>ignore</param-name>
-   <param-value>false</param-value>
-  </init-param>
- </filter>
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+  <description>The presentation layer webapp for complex Tasks of the TaskModel.</description>
+  <display-name>taskmodel-core-view</display-name>
   <filter>
-  <filter-name>exportPdfFilter</filter-name>
-  <filter-class>de.thorstenberger.taskmodel.view.webapp.filter.ExportPDFFilter</filter-class>
- </filter>
- <filter-mapping>
-  <filter-name>SetCharacterEncodingFilter</filter-name>
-  <servlet-name>action</servlet-name>
- </filter-mapping>
+    <display-name>Set Character Encoding Filter</display-name>
+    <filter-name>SetCharacterEncodingFilter</filter-name>
+    <filter-class>de.thorstenberger.taskmodel.view.SetCharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+    <init-param>
+      <param-name>ignore</param-name>
+      <param-value>false</param-value>
+    </init-param>
+  </filter>
+  <filter>
+    <filter-name>exportPdfFilter</filter-name>
+    <filter-class>de.thorstenberger.taskmodel.view.webapp.filter.ExportPDFFilter</filter-class>
+  </filter>
   <filter-mapping>
-  <filter-name>exportPdfFilter</filter-name>
-  <servlet-name>action</servlet-name>
- </filter-mapping>
- <listener>
-  <listener-class>de.thorstenberger.taskmodel.view.SessionListener</listener-class>
- </listener>
- <listener>
-  <listener-class>de.thorstenberger.taskmodel.view.webapp.filter.InitViewFactoryListener</listener-class>
- </listener>
- <servlet>
-  <servlet-name>action</servlet-name>
-  <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
-  <init-param>
-   <param-name>config</param-name>
-   <param-value>/WEB-INF/struts-config.xml</param-value>
-  </init-param>
- </servlet>
- <servlet>
-  <servlet-name>ExcelReport</servlet-name>
-  <servlet-class>de.thorstenberger.taskmodel.view.statistics.ExcelReportServlet</servlet-class>
- </servlet>
- <servlet>
-  <servlet-name>AjaxResponse</servlet-name>
-  <servlet-class>de.thorstenberger.taskmodel.view.AjaxResponseServlet</servlet-class>
- </servlet>
- <servlet-mapping>
-  <servlet-name>action</servlet-name>
-  <url-pattern>*.do</url-pattern>
- </servlet-mapping>
- <servlet-mapping>
-  <servlet-name>ExcelReport</servlet-name>
-  <url-pattern>/excelReport/*</url-pattern>
- </servlet-mapping>
- <servlet-mapping>
-  <servlet-name>AjaxResponse</servlet-name>
-  <url-pattern>/ajaxResponse</url-pattern>
- </servlet-mapping>
- <session-config>
-  <session-timeout>240</session-timeout>
- </session-config>
- <!-- not supported by gae
- <login-config>
-  <auth-method>BASIC</auth-method>
- </login-config>
--->
- <error-page>
-  <error-code>500</error-code>
-  <location>/error.jsp</location>
- </error-page>
- 
- <!-- 
- =======================================================================================
- changes needed for running at the gae 
- ======================================================================================= 
- -->
-   
-    <servlet>
-        <servlet-name>upload</servlet-name>
-        <servlet-class>de.elatexam.UploadTaskdefServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>upload</servlet-name>
-        <url-pattern>/upload</url-pattern>
-    </servlet-mapping>
+    <filter-name>SetCharacterEncodingFilter</filter-name>
+    <servlet-name>action</servlet-name>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>exportPdfFilter</filter-name>
+    <servlet-name>action</servlet-name>
+  </filter-mapping>
+  <listener>
+    <listener-class>de.thorstenberger.taskmodel.view.SessionListener</listener-class>
+  </listener>
+  <listener>
+    <listener-class>de.thorstenberger.taskmodel.view.webapp.filter.InitViewFactoryListener</listener-class>
+  </listener>
+  <servlet>
+    <servlet-name>action</servlet-name>
+    <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
+    <init-param>
+      <param-name>config</param-name>
+      <param-value>/WEB-INF/struts-config.xml</param-value>
+    </init-param>
+  </servlet>
+  <servlet>
+    <servlet-name>ExcelReport</servlet-name>
+    <servlet-class>de.thorstenberger.taskmodel.view.statistics.ExcelReportServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>AjaxResponse</servlet-name>
+    <servlet-class>de.thorstenberger.taskmodel.view.AjaxResponseServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>action</servlet-name>
+    <url-pattern>*.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ExcelReport</servlet-name>
+    <url-pattern>/excelReport/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AjaxResponse</servlet-name>
+    <url-pattern>/ajaxResponse</url-pattern>
+  </servlet-mapping>
+  <session-config>
+    <session-timeout>240</session-timeout>
+  </session-config>
+  <!-- not supported by gae <login-config> <auth-method>BASIC</auth-method> 
+    </login-config> -->
+  <error-page>
+    <error-code>500</error-code>
+    <location>/error.jsp</location>
+  </error-page>
 
-    <servlet>
-        <servlet-name>preview</servlet-name>
-        <servlet-class>de.elatexam.PreviewServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>preview</servlet-name>
-        <url-pattern>/preview</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>delete</servlet-name>
-        <servlet-class>de.elatexam.DeleteServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>delete</servlet-name>
-        <url-pattern>/delete</url-pattern>
-    </servlet-mapping>
+  <!-- ======================================================================================= 
+    changes needed for running at the gae ======================================================================================= -->
+
+  <servlet>
+    <servlet-name>upload</servlet-name>
+    <servlet-class>de.elatexam.UploadTaskdefServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>upload</servlet-name>
+    <url-pattern>/upload</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>preview</servlet-name>
+    <servlet-class>de.elatexam.PreviewServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>preview</servlet-name>
+    <url-pattern>/preview</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>delete</servlet-name>
+    <servlet-class>de.elatexam.DeleteServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>delete</servlet-name>
+    <url-pattern>/delete</url-pattern>
+  </servlet-mapping>
   <servlet>
     <servlet-name>cleanuptasklet</servlet-name>
     <servlet-class>de.elatexam.DeleteOldTaskletsServlet</servlet-class>
@@ -114,17 +109,17 @@
     <servlet-name>cleanuptasklet</servlet-name>
     <url-pattern>/_ah/cleanup</url-pattern>
   </servlet-mapping>
-  
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>cleanup</web-resource-name>
-            <url-pattern>/_ah/cleanup</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>admin</role-name>
-        </auth-constraint>
-    </security-constraint>  
-      
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>cleanup</web-resource-name>
+      <url-pattern>/_ah/cleanup</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>admin</role-name>
+    </auth-constraint>
+  </security-constraint>
+
   <servlet>
     <servlet-name>ping</servlet-name>
     <servlet-class>de.elatexam.PingServlet</servlet-class>
@@ -132,52 +127,73 @@
   <servlet-mapping>
     <servlet-name>ping</servlet-name>
     <url-pattern>/_ah/queue/default</url-pattern>
-    
+
   </servlet-mapping>
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>queues</web-resource-name>
-            <url-pattern>/_ah/queue/*</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>admin</role-name>
-        </auth-constraint>
-    </security-constraint>  
-  
-    <!--  appstats -->
-    <servlet>
-        <servlet-name>appstats</servlet-name>
-        <servlet-class>com.google.appengine.tools.appstats.AppstatsServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>appstats</servlet-name>
-        <url-pattern>/appstats/*</url-pattern>
-    </servlet-mapping>
-    <filter>
-        <filter-name>appstats</filter-name>
-        <filter-class>com.google.appengine.tools.appstats.AppstatsFilter</filter-class>
-        <init-param>
-            <param-name>logMessage</param-name>
-            <param-value>Appstats available: /appstats/details?time={ID}</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>appstats</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>    
-    
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>appstats</web-resource-name>
-            <url-pattern>/appstats/*</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>admin</role-name>
-        </auth-constraint>
-    </security-constraint>
-    <!--  /appstats -->
-        
-    <welcome-file-list>
-        <welcome-file>uploadFile.jsp</welcome-file>
-    </welcome-file-list>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>queues</web-resource-name>
+      <url-pattern>/_ah/queue/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>admin</role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <!-- appstats -->
+  <servlet>
+    <servlet-name>appstats</servlet-name>
+    <servlet-class>com.google.appengine.tools.appstats.AppstatsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>appstats</servlet-name>
+    <url-pattern>/appstats/*</url-pattern>
+  </servlet-mapping>
+  <filter>
+    <filter-name>appstats</filter-name>
+    <filter-class>com.google.appengine.tools.appstats.AppstatsFilter</filter-class>
+    <init-param>
+      <param-name>logMessage</param-name>
+      <param-value>Appstats available: /appstats/details?time={ID}</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>appstats</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>appstats</web-resource-name>
+      <url-pattern>/appstats/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>admin</role-name>
+    </auth-constraint>
+  </security-constraint>
+  <!-- /appstats -->
+  <!-- cleanup expired sessions -->
+  <servlet>
+    <servlet-name>_ah_sessioncleanup</servlet-name>
+    <servlet-class>com.google.apphosting.utils.servlet.SessionCleanupServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>_ah_sessioncleanup</servlet-name>
+    <url-pattern>/_ah/sessioncleanup</url-pattern>
+  </servlet-mapping>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>session-cleanup</web-resource-name>
+      <url-pattern>/_ah/sessioncleanup</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>admin</role-name>
+    </auth-constraint>
+  </security-constraint>
+
+
+  <welcome-file-list>
+    <welcome-file>uploadFile.jsp</welcome-file>
+  </welcome-file-list>
 </web-app>
