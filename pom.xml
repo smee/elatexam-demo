@@ -116,7 +116,7 @@ warSrcDirIsOutput=true]]>
       <plugin>
         <groupId>net.kindleit</groupId>
         <artifactId>maven-gae-plugin</artifactId>
-        <version>0.5.9</version>
+        <version>0.8.4</version>
         <configuration>
           <unpackVersion>${gae.version}</unpackVersion>
         </configuration>
@@ -396,7 +396,7 @@ warSrcDirIsOutput=true]]>
   <properties>
     <maven.executable>mvn</maven.executable>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <gae.version>1.4.0</gae.version>
+    <gae.version>1.5.1</gae.version>
     <datanucleus.version>1.1.5</datanucleus.version>
     <jdo.version>2.3-eb</jdo.version>
   </properties>
