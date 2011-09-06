@@ -1,0 +1,15 @@
+<!-- Indices written at Tue, 6 Sep 2011 07:56:04 UTC -->
+
+<datastore-indexes>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="CorrectorTaskletAnnotationVO" ancestor="true" source="auto">
+        <property name="correctorAnnotations_INTEGER_IDX" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="StudentTaskletAnnotationVO" ancestor="true" source="auto">
+        <property name="studentAnnotations_INTEGER_IDX" direction="asc"/>
+    </datastore-index>
+
+</datastore-indexes>
