@@ -251,7 +251,7 @@ warSrcDirIsOutput=true]]>
     <dependency>
       <groupId>com.google.appengine.orm</groupId>
       <artifactId>datanucleus-appengine</artifactId>
-      <version>1.0.7.final</version>
+      <version>1.0.8</version>
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
