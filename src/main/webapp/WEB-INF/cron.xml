@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
+<!--  
   <cron>
     <url>/_ah/queue/default?token=start</url>
     <description>Keep alive.</description>
     <schedule>every 1 hours</schedule>
     <timezone>America/Los_Angeles</timezone>
   </cron>
+-->  
   <cron>
     <url>/_ah/cleanup</url>
     <description>Delete old tasklets.</description>
